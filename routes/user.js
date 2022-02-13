@@ -4,10 +4,11 @@ import {
 	createUser,
 	loginUser,
 } from '../controllers/user.controller'
+import { authToken } from '../auth'
 
 const router = Router()
 
-router.get('/operations', getOperationsUser)
+router.get('/operations',authToken, getOperationsUser)
 router.post('/register', createUser)
 router.get('/operations', loginUser)
 

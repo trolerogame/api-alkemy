@@ -4,11 +4,12 @@ import {
 	deleteOperation,
 	updateOperation,
 } from '../controllers/operation.controller'
+import { authToken } from '../auth'
 
 const router = Router()
 
-router.post('/create', createOperation)
-router.post('/update/:id', updateOperation)
-router.post('/delete/:id', deleteOperation)
+router.post('/create',authToken, createOperation)
+router.post('/update/:id',authToken, updateOperation)
+router.post('/delete/:id',authToken, deleteOperation)
 
 export default router
