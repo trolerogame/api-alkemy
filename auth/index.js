@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import {config} from '../config'
+import {config} from '../config/index.js'
 export const authToken = (req,res,next) => {
     const header = req.headers.authorization
     if(!header) return 'No authorization header found'

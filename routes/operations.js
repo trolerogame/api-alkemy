@@ -3,8 +3,8 @@ import {
 	createOperation,
 	deleteOperation,
 	updateOperation,
-} from '../controllers/operation.controller'
-import { authToken } from '../auth'
+} from '../controllers/operation.controller.js'
+import { authToken } from '../auth/index.js'
 
 const router = Router()
 

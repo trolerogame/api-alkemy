@@ -1,16 +1,18 @@
 import express, { json, urlencoded } from 'express'
-import { config } from './config'
 import cors from 'cors'
-import operationsRoute from './routes/operations'
-import userRoute from './routes/user'
-import {con} from './db/connect'
+import { config } from './config/index.js'
+import operationsRoute from './routes/operations.js'
+import userRoute from './routes/user.js'
+import {con} from './db/connect.js'
+
+// init
 const app = express()
 
 // config
 
 app.use(cors())
 app.use(json())
-app.use(urlencoded())
+app.use(urlencoded({ extended: true }))
 
 // Routes
 
@@ -20,7 +22,7 @@ app.use('/user', userRoute)
 // listen
 
 con.connect((error) => {
-	if(error) return
+	if(error) return console.log(error)
 	console.log('database connect')
 })
 

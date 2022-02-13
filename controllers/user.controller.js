@@ -1,19 +1,22 @@
 import jwt from 'jsonwebtoken'
-import { config } from '../config'
-import { con } from '../db/connect'
-import { encryptPassword, comparePassword } from '../utils/bcrypt'
+import { config } from '../config/index.js'
+import { con } from '../db/connect.js'
+import { encryptPassword, comparePassword } from '../utils/bcrypt.js'
+import { v4 } from 'uuid'
+const resError = (st,error,res) => 
+	res.status(st).send({ error })
+
 export const getOperationsUser = (req, res) => {}
 
-export const createUser = (req, res) => {
+export const createUser = async (req, res) => {
 	const { email, password } = req.body
-	const insertUserQuery = `INSERT INTO users (email, password) VALUES ('${email}', '${encryptPassword(
+	const insertUserQuery = `INSERT INTO users (id,email, password) VALUES (UUID_TO_BIN(UUID()),'${email}', '${await encryptPassword(
 		password
 	)}')`
 	con.query(insertUserQuery, (err, result) => {
-		if (err) res.status(403).send({ error: 'The user already exists' })
+		if (err) return resError(403, 'The user already exists', res)
 		res.json({ result })
 	})
-	res.send('User Created')
 }
 
 export const loginUser = (req, res) => {
@@ -21,9 +24,10 @@ export const loginUser = (req, res) => {
 	const getUserQuery = `SELECT email,password FROM users WHERE email = '${email}'`
     con.query(getUserQuery, (err, result) => {
         if(err) return
-        const compare = comparePassword(password,result.password)
+		if(result.length === 0) return resError(404,'The user does not exist', res)
+        const compare = comparePassword(password,result[0].password)
         if(!compare) res.status(403).json({error:'the user or password does not exist or is not valid'})
-        const token = jwt.sign({result}, config.secret)
+        const token = jwt.sign({...result[0]}, config.secret)
         res.json({token})
     })
 }

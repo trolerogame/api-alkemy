@@ -1,7 +1,10 @@
 import mysql from 'mysql'
-
+import { config } from '../config/index.js'
 export const con = mysql.createConnection({
-        host:'',
-        user:'',
-        password:'',
+	host: config.host,
+	user: config.user,
+	password: config.password,
+	database:'alkemy',
+	insecureAuth : true,
+	port:3306
 })

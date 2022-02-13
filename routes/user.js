@@ -3,13 +3,13 @@ import {
 	getOperationsUser,
 	createUser,
 	loginUser,
-} from '../controllers/user.controller'
-import { authToken } from '../auth'
+} from '../controllers/user.controller.js'
+import { authToken } from '../auth/index.js'
 
 const router = Router()
 
 router.get('/operations',authToken, getOperationsUser)
 router.post('/register', createUser)
-router.get('/operations', loginUser)
+router.post('/login', loginUser)
 
 export default router
