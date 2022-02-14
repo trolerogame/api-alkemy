@@ -1,10 +1,9 @@
-import mysql from 'mysql'
-import { config } from '../config/index.js'
-export const con = mysql.createConnection({
-	host: config.host,
-	user: config.user,
-	password: config.password,
-	database:'alkemy',
-	insecureAuth : true,
-	port:3306
+import {Sequelize} from 'sequelize'
+import {config} from '../config/index.js'
+const {user,password,host} = config
+export const sequelize = new Sequelize(`mysql://${user}:${password}@${host}:3306/alkemy`)
+
+
+sequelize.sync({force:false}).then(() => {
+	console.log('Databases running')
 })

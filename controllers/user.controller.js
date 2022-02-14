@@ -1,33 +1,51 @@
 import jwt from 'jsonwebtoken'
 import { config } from '../config/index.js'
-import { con } from '../db/connect.js'
 import { encryptPassword, comparePassword } from '../utils/bcrypt.js'
+import User from '../schema/User.js'
 import { v4 } from 'uuid'
-const resError = (st,error,res) => 
-	res.status(st).send({ error })
 
-export const getOperationsUser = (req, res) => {}
+const resError = (st, error, res) => res.status(st).send({ error })
+
+export const getOperationsUser = (req, res) => {
+	console.log(req.userId)
+}
 
 export const createUser = async (req, res) => {
 	const { email, password } = req.body
-	const insertUserQuery = `INSERT INTO users (id,email, password) VALUES (UUID_TO_BIN(UUID()),'${email}', '${await encryptPassword(
-		password
-	)}')`
-	con.query(insertUserQuery, (err, result) => {
-		if (err) return resError(403, 'The user already exists', res)
-		res.json({ result })
-	})
+	if (!email || !password)
+		return resError(402, 'Please enter a valid email and password', res)
+	try {
+		await User.create({
+			id: v4(),
+			email,
+			password: await encryptPassword(password),
+		})
+		res.json({ message: '', email, password })
+	} catch (err) {
+		resError(401, 'The user already exists', res)
+	}
 }
 
-export const loginUser = (req, res) => {
+export const loginUser = async (req, res) => {
 	const { email, password } = req.body
-	const getUserQuery = `SELECT email,password FROM users WHERE email = '${email}'`
-    con.query(getUserQuery, (err, result) => {
-        if(err) return
-		if(result.length === 0) return resError(404,'The user does not exist', res)
-        const compare = comparePassword(password,result[0].password)
-        if(!compare) res.status(403).json({error:'the user or password does not exist or is not valid'})
-        const token = jwt.sign({...result[0]}, config.secret)
-        res.json({token})
-    })
+	if (!email || !password)
+		return resError(402, 'Please enter a valid email and password', res)
+	try {
+		const userFind = await User.findAll({ where: { email } })
+		if (!userFind.length)
+			return resError(404, 'The user does not exist', res)
+		const { id, password: passwordHash } = userFind[0].dataValues
+		const compare = await comparePassword(password, passwordHash)
+		if (!compare)
+			return resError(
+				403,
+				'the email or password does not exist or is not valid',
+				res
+			)
+		const token = jwt.sign({ id, email }, config.secret)
+		res.json({ token })
+	} catch (e) {
+		console.log(e)
+		res.send('error')
+	}
 }
