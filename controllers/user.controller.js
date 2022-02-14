@@ -3,8 +3,7 @@ import { config } from '../config/index.js'
 import { encryptPassword, comparePassword } from '../utils/bcrypt.js'
 import User from '../schema/User.js'
 import { v4 } from 'uuid'
-
-const resError = (st, error, res) => res.status(st).send({ error })
+import { resError } from '../utils/resError.js'
 
 export const getOperationsUser = (req, res) => {
 	console.log(req.userId)
