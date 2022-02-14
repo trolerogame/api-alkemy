@@ -2,11 +2,18 @@ import jwt from 'jsonwebtoken'
 import { config } from '../config/index.js'
 import { encryptPassword, comparePassword } from '../utils/bcrypt.js'
 import User from '../schema/User.js'
+import Operation from '../schema/Operation.js'
 import { v4 } from 'uuid'
 import { resError } from '../utils/resError.js'
 
-export const getOperationsUser = (req, res) => {
-	console.log(req.userId)
+export const getOperationsUser = async (req, res) => {
+	const {userId} = req
+	const user = await User.findOne({id:userId})
+	if(!user) return resError(404,'The user does not exist',res)
+	const operations = await Operation.findAll({idUser:userId})
+	res.json({operations,user:{
+		email:user.email
+	}})
 }
 
 export const createUser = async (req, res) => {
