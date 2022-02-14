@@ -25,5 +25,11 @@ export const updateOperation = (req, res) => {
     
 }
 
-export const deleteOperation = (req, res) => {
+export const deleteOperation = async (req, res) => {
+    await Operation.destroy({
+        where: {
+            id:req.params.id
+        }
+    })
+    res.send('Operation delete')
 }

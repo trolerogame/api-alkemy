@@ -9,7 +9,7 @@ import { authToken } from '../auth/index.js'
 const router = Router()
 
 router.post('/create',authToken, createOperation)
-router.post('/update/:id',authToken, updateOperation)
-router.post('/delete/:id',authToken, deleteOperation)
+router.patch('/update/:id',authToken, updateOperation)
+router.delete('/delete/:id',authToken, deleteOperation)
 
 export default router
