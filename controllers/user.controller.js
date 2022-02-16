@@ -18,6 +18,7 @@ export const getOperationsUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
 	const { email, password } = req.body
+	
 	if (!email || !password)
 		return resError(402, 'Please enter a valid email and password', res)
 	try {
