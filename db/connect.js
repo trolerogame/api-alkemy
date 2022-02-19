@@ -3,7 +3,8 @@ import {config} from '../config/index.js'
 const {user,password,host} = config
 export const sequelize = new Sequelize('alkemy',user,password,{
 	host,
-	dialect:'mysql'
+	dialect:'mysql',
+	logging:false,
 })
 
 
