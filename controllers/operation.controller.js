@@ -2,18 +2,20 @@ import Operation from '../schema/Operation.js'
 import { resError } from '../utils/resError.js'
 import { v4 } from 'uuid'
 export const createOperation = async (req, res) => {
-	const { concept, amount, type } = req.body
-	if (!concept || !amount || !type)
+	const { concept, amount, type,date } = req.body
+	if (!concept || !amount || !type || !date)
 		return resError(
 			402,
-			'The operation requires the concept, amount and type'
+			'The operation requires the concept, date, amount and type'
 		)
+
 	try {
 		const operation = await Operation.create({
 			id: v4(),
 			idUser: req.userId,
 			concept,
 			amount,
+			date,
 			incomOrExit: type,
 		})
 		res.send(operation.dataValues)
@@ -24,8 +26,8 @@ export const createOperation = async (req, res) => {
 }
 
 export const updateOperation = async (req, res) => {
-	const { concept, amount } = req.body
-	if (!concept && !amount)
+	const { concept, amount, date } = req.body
+	if (!concept && !amount && !date)
 		return resError(
 			402,
 			'The operation requires the concept or/and amount to be provided'
@@ -39,6 +41,7 @@ export const updateOperation = async (req, res) => {
 		{
 			concept: concept || dataValues.concept,
 			amount: amount || dataValues.amount,
+			date: date || dataValues.date
 		},
 		{
 			where: {
@@ -46,7 +49,8 @@ export const updateOperation = async (req, res) => {
 			},
 		}
 	)
-    res.send('Operation update')
+	const edit = await Operation.findOne({id})
+    res.json({...edit.dataValues})
 }
 
 export const deleteOperation = async (req, res) => {

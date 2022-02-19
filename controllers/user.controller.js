@@ -7,27 +7,41 @@ import { v4 } from 'uuid'
 import { resError } from '../utils/resError.js'
 
 export const getOperationsUser = async (req, res) => {
-	const {userId} = req
-	const user = await User.findOne({id:userId})
-	if(!user) return resError(404,'The user does not exist',res)
-	const operations = await Operation.findAll({idUser:userId})
-	res.json({operations,user:{
-		email:user.email
-	}})
+	const { userId } = req
+	const user = await User.findOne({ where: { id: userId } })
+	if (!user) return resError(404, 'The user does not exist', res)
+	const operations = await Operation.findAll({ where: { idUser: userId }, order:['createdAt'] })
+
+	res.json({
+		operations,
+		user: {
+			username: user.dataValues.username,
+		},
+	})
 }
 
 export const createUser = async (req, res) => {
-	const { email, password } = req.body
-	
-	if (!email || !password)
-		return resError(402, 'Please enter a valid email and password', res)
+	const { email, password, username } = req.body
+	if (!email || !password || !username)
+		return resError(
+			402,
+			'Please enter a valid username, email and password',
+			res
+		)
 	try {
 		await User.create({
 			id: v4(),
+			username,
 			email,
 			password: await encryptPassword(password),
 		})
-		res.json({ message: '', email, password })
+		res.json({
+			error: '',
+			message: 'User Created',
+			username,
+			email,
+			password,
+		})
 	} catch (err) {
 		resError(401, 'The user already exists', res)
 	}
