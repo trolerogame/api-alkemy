@@ -10,10 +10,7 @@ const Operation = sequelize.define('Operations',{
     },
     idUser:{
         type:DataTypes.UUID,
-        references:{
-            model:'users',
-            key:'id'
-        }
+        allowNull:false,
     },
     amount:{
         type:DataTypes.INTEGER,
@@ -25,6 +22,10 @@ const Operation = sequelize.define('Operations',{
     },
     incomOrExit:{
         type:DataTypes.STRING,
+        allowNull:false,
+    },
+    date:{
+        type:DataTypes.DATE,
         allowNull:false,
     }
 })
