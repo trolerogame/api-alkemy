@@ -11,7 +11,7 @@ const app = express()
 
 // config
 
-app.use(cors())
+app.use(cors({origin:'http://localhost:3000'}))
 app.use(json())
 app.use(urlencoded({ extended: true }))
 
@@ -22,6 +22,6 @@ app.use('/user', userRoute)
 
 // listen
 
-app.listen(config.port || 3000, () => {
-	console.log('server running in http://localhost:3000')
+app.listen(config.port || 3300, () => {
+	console.log('server running in http://localhost:' + config.port || 3300)
 })
