@@ -1,5 +1,5 @@
 
-### INSTALL PACKEGA
+### INSTALL PACKEGAS
 
 ```bash
     npm i
