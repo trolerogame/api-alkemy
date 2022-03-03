@@ -1,7 +1,7 @@
 import {Sequelize} from 'sequelize'
 import {config} from '../config/index.js'
-const {user,password,host} = config
-export const sequelize = new Sequelize('alkemy',user,password,{
+const {USERNAME,password,host} = config
+export const sequelize = new Sequelize('alkemy',USERNAME,password,{
 	host,
 	dialect:'mysql',
 	logging:false,
