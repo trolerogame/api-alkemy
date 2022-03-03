@@ -9,6 +9,6 @@ export const sequelize = new Sequelize(db,user,password,{
 })
 
 
-sequelize.authenticate().then(() => {
+sequelize.sync({force:false}).then(() => {
 	console.log('Databases running')
 }).catch(err => console.log(err))
