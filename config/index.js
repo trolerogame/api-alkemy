@@ -6,4 +6,5 @@ export const config = {
 	user: process.env.USER,
 	password: process.env.PASSWORD,
 	host: process.env.HOST,
+	db: process.env.DB,
 }
