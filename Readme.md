@@ -11,9 +11,11 @@
     # mysql server
     PASSWORD=my_password
     HOST=localhost
-    USER=root
+    USERNAME=root
     PORT=5050  # port server
     SECRET=secretkey  # secret key for jwt
+    DB=my_db
+    PORTDB=port database
 ```
 
 
