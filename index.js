@@ -11,7 +11,7 @@ const app = express()
 
 // config
 
-app.use(cors({origin:'http://localhost:3000'}))
+app.use(cors({origin:'https://client-alkemy.vercel.app'}))
 app.use(json())
 app.use(urlencoded({ extended: true }))
 
