@@ -7,5 +7,6 @@ export const config = {
 	password: process.env.PASSWORD,
 	host: process.env.HOST,
 	db: process.env.DB,
-	portdb: process.env.PORTDB
+	portdb: process.env.PORTDB,
+	database_url: process.env.DATABASE_URL
 }
