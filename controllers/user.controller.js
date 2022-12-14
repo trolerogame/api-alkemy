@@ -22,6 +22,7 @@ export const getOperationsUser = async (req, res) => {
 
 export const createUser = async (req, res) => {
 	const { email, password, username } = req.body
+	console.log('oniaaaaaaaaaaa')
 	if (!email || !password || !username)
 		return resError(
 			402,
